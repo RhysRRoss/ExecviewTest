@@ -20,10 +20,12 @@ class BasketballSorter(object):
         for key, item in players_dict.items():
             out_dict['Players'].append(item)
 
-        out_dict['AveragePPG'] = []
-        out_dict['AveragePPG'].append(self.get_average(players_df, 'PPG'))
+        out_dict['AveragePPG'] = self.get_average(players_df, 'PPG')
+        #out_dict['AveragePPG'].append(self.get_average(players_df, 'PPG'))
 
         self.top_selection(players_df, 'PPG', 3)
+
+        self.players_position_count(players_df)
 
         return out_dict
 
@@ -60,11 +62,22 @@ class BasketballSorter(object):
 
     def players_position_count(self, pd_df):
         '''Gets the occurence of values in position column'''
-        return pd_df
+        in_df = pd_df['Position'].value_counts()
+        print (in_df)
+        out_dict[''] = {
+            'PG': in_df['PG'],
+            'C': in_df['C'],
+            'PF': in_df['PF'],
+            'SG': in_df['SG'],
+            'SF': in_df['SF'],
+        }
+        return out_dict
 
 
     def get_average_height(self, pd_df):
         '''Gets the average value from the height column'''
+
+
         return pd_df
 
 
@@ -88,6 +101,12 @@ class BasketballSorter(object):
 
         if(test_dict['Leaders'] != ans_dict['Leaders']):
             result += 'top_select fails, '
+
+        if (test_dict[''] != ans_dict['']):
+            result += 'player_postion_count fails, '
+
+        if (test_dict['AverageHeight'] != ans_dict['AverageHeight']):
+            result += 'average_height fails, '
 
         if(result != ''):
             return print(result)
