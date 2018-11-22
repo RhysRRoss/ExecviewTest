@@ -23,11 +23,7 @@ class BasketballSorter(object):
         out_dict['AveragePPG'] = []
         out_dict['AveragePPG'].append(self.get_average(players_df, 'PPG'))
 
-        out_dict['Leaders'] = []
-        #out_dict['Leaders'].append(self.top_selection(players_df, 'PPG', 3))
-
-
-        #print(js.dumps(out_dict))
+        self.top_selection(players_df, 'PPG', 3)
 
         return out_dict
 
@@ -44,7 +40,22 @@ class BasketballSorter(object):
 
     def top_selection(self, pd_df, col, count):
         '''Gets the top three values from dataframe'''
-        return pd_df.head(count)
+        in_df = pd_df.head(count)[['Name', 'PPG']]
+
+        out_dict['Leaders'] = []
+
+        for con in range(count):
+            if (con == 0):
+                out_dict['Leaders'].append({'Gold': in_df.iloc[con]['Name'], 'PPG': in_df.iloc[0]['PPG']})
+            elif (con == 1):
+                out_dict['Leaders'].append({'Silver': in_df.iloc[1]['Name'], 'PPG': in_df.iloc[1]['PPG']})
+            elif (con == 2):
+                out_dict['Leaders'].append({'Bronze': in_df.iloc[2]['Name'], 'PPG': in_df.iloc[2]['PPG']})
+            else:
+                out_dict['Leaders'].append({str(x): in_df.iloc[2]['Name'], 'PPG': in_df.iloc[2]['PPG']})
+            con += 1
+
+        return out_dict
 
 
     def players_position_count(self, pd_df):
