@@ -8,6 +8,10 @@ csv_to_df = pd.DataFrame()
 
 class BasketballSorter(object):
 
+    def save_json(self):
+        with open('bball_data.json', 'w') as f:
+            js.dump(self.get_json(), f)
+
     def get_json(self):
         '''Calls all the required methods to format the csv into json'''
         players_df = pd.read_csv(filedialog.askopenfilename())
@@ -21,11 +25,12 @@ class BasketballSorter(object):
             out_dict['Players'].append(item)
 
         out_dict['AveragePPG'] = self.get_average(players_df, 'PPG')
-        #out_dict['AveragePPG'].append(self.get_average(players_df, 'PPG'))
 
         self.top_selection(players_df, 'PPG', 3)
 
         self.players_position_count(players_df)
+
+        out_dict['AverageHeight'] = self.get_average_height(players_df)
 
         return out_dict
 
@@ -63,22 +68,27 @@ class BasketballSorter(object):
     def players_position_count(self, pd_df):
         '''Gets the occurence of values in position column'''
         in_df = pd_df['Position'].value_counts()
-        print (in_df)
         out_dict[''] = {
-            'PG': in_df['PG'],
-            'C': in_df['C'],
-            'PF': in_df['PF'],
-            'SG': in_df['SG'],
-            'SF': in_df['SF'],
+            'PG': int(in_df['PG']),
+            'C': int(in_df['C']),
+            'PF': int(in_df['PF']),
+            'SG': int(in_df['SG']),
+            'SF': int(in_df['SF'])
         }
         return out_dict
 
 
     def get_average_height(self, pd_df):
         '''Gets the average value from the height column'''
+        average = 0
+        in_df = pd_df['Height']
 
+        for count, row in in_df.items():
+            val = [int(x) for x in str(row).split() if x.isdigit()]
+            average += (val[0]*30.48) + (val[1]*2.54)
 
-        return pd_df
+        average = average / in_df.count()
+        return str(average) + ' cm'
 
 
     def test_outputs(self):
@@ -115,4 +125,4 @@ class BasketballSorter(object):
 
 
 if __name__ == '__main__':
-    BasketballSorter().test_outputs()
+    BasketballSorter().save_json()
