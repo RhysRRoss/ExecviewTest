@@ -1,5 +1,5 @@
 # ExecviewTest
-Project is dont in Python.
+Project is done in Python.
 
 Should be executable from a Python IDE (Pycharm was used for this development).
 
@@ -9,3 +9,5 @@ The three main methods to be run are:
 - save_json
 - test_outputs
 - get_json (is called by the above)
+
+Tests are based on matching a solved file.
